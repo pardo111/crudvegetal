@@ -1,0 +1,119 @@
+<section class="mx-auto max-w-3xl">
+  <a routerLink="/" class="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-emerald-800">
+    <span aria-hidden="true">←</span> Volver a registros
+  </a>
+
+  <div class="mb-7">
+    <p class="mb-2 text-sm font-semibold uppercase tracking-[0.16em] text-emerald-700">
+      {{ id ? 'Editar información' : 'Nuevo registro' }}
+    </p>
+    <h1 class="text-3xl font-bold tracking-tight text-slate-950">
+      {{ id ? 'Actualizar registro' : 'Crear registro' }}
+    </h1>
+    <p class="mt-2 text-sm leading-6 text-slate-600">Elige el tipo de registro para mostrar los campos correspondientes.</p>
+  </div>
+
+  @if (error) {
+    <div role="alert" class="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{{ error }}</div>
+  }
+
+  @if (loading) {
+    <div class="rounded-2xl border border-stone-200 bg-white p-10 text-center text-sm text-slate-500">
+      Cargando información…
+    </div>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="save()" class="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm sm:p-8">
+      <fieldset [disabled]="submitting || !!(id && error)" class="min-w-0">
+        <legend class="mb-3 text-sm font-semibold text-slate-800">Tipo de registro</legend>
+        <div class="mb-8 grid grid-cols-2 gap-3 rounded-xl bg-stone-100 p-1.5">
+          <button type="button" (click)="selectType('planta')"
+            [attr.aria-pressed]="selectedType === 'planta'"
+            [class]="selectedType === 'planta' ? 'bg-white text-emerald-800 shadow-sm' : 'text-slate-600 hover:text-slate-900'"
+            class="rounded-lg px-4 py-3 text-sm font-semibold transition-colors">
+            🌿 Planta
+          </button>
+          <button type="button" (click)="selectType('persona')"
+            [attr.aria-pressed]="selectedType === 'persona'"
+            [class]="selectedType === 'persona' ? 'bg-white text-violet-800 shadow-sm' : 'text-slate-600 hover:text-slate-900'"
+            class="rounded-lg px-4 py-3 text-sm font-semibold transition-colors">
+            Persona
+          </button>
+        </div>
+
+        @if (selectedType === 'planta') {
+          <div class="grid gap-5 sm:grid-cols-2">
+            <label class="field-label">Nombre
+              <input formControlName="nombre" type="text" autocomplete="off" class="field-input" placeholder="Ej. Albahaca" />
+              @if (form.controls.nombre.touched && form.controls.nombre.invalid) { <span class="field-error">El nombre es obligatorio.</span> }
+            </label>
+            <label class="field-label">Tipo
+              <select formControlName="tipo" class="field-input">
+                <option value="Hortaliza">Hortaliza</option>
+                <option value="Frutal">Frutal</option>
+                <option value="Ornamental">Ornamental</option>
+                <option value="Medicinal">Medicinal</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </label>
+            <label class="field-label">Especie
+              <input formControlName="especie" type="text" class="field-input" placeholder="Ej. Ocimum basilicum" />
+              @if (form.controls.especie.touched && form.controls.especie.invalid) { <span class="field-error">La especie es obligatoria.</span> }
+            </label>
+            <label class="field-label">Fecha de siembra
+              <input formControlName="fechaSiembra" type="date" class="field-input" />
+              @if (form.controls.fechaSiembra.touched && form.controls.fechaSiembra.invalid) { <span class="field-error">La fecha es obligatoria.</span> }
+            </label>
+            <label class="field-label">Estado
+              <select formControlName="estado" class="field-input">
+                <option value="Sembrado">Sembrado</option>
+                <option value="En crecimiento">En crecimiento</option>
+                <option value="Listo para cosecha">Listo para cosecha</option>
+                <option value="En reposo">En reposo</option>
+              </select>
+            </label>
+          </div>
+        } @else {
+          <div class="grid gap-5 sm:grid-cols-2">
+            <label class="field-label">Nombre
+              <input formControlName="personaNombre" type="text" autocomplete="given-name" class="field-input" placeholder="Nombre" />
+              @if (form.controls.personaNombre.touched && form.controls.personaNombre.invalid) { <span class="field-error">El nombre es obligatorio.</span> }
+            </label>
+            <label class="field-label">Apellidos
+              <input formControlName="apellidos" type="text" autocomplete="family-name" class="field-input" placeholder="Apellidos" />
+              @if (form.controls.apellidos.touched && form.controls.apellidos.invalid) { <span class="field-error">Los apellidos son obligatorios.</span> }
+            </label>
+            <label class="field-label">Fecha de inicio
+              <input formControlName="fechaInicio" type="date" class="field-input" />
+              @if (form.controls.fechaInicio.touched && form.controls.fechaInicio.invalid) { <span class="field-error">La fecha es obligatoria.</span> }
+            </label>
+            <label class="field-label">Causa
+              <input formControlName="causa" type="text" class="field-input" placeholder="Causa registrada" />
+              @if (form.controls.causa.touched && form.controls.causa.invalid) { <span class="field-error">La causa es obligatoria.</span> }
+            </label>
+            <label class="field-label">Gravedad
+              <select formControlName="gravedad" class="field-input">
+                <option value="Leve">Leve</option>
+                <option value="Moderada">Moderada</option>
+                <option value="Grave">Grave</option>
+                <option value="Crítica">Crítica</option>
+              </select>
+            </label>
+          </div>
+        }
+
+        <label class="field-label mt-5">Observaciones
+          <textarea formControlName="observaciones" rows="4" class="field-input resize-y"
+            placeholder="Agrega información adicional (opcional)"></textarea>
+        </label>
+
+        <div class="mt-8 flex flex-col-reverse justify-end gap-3 border-t border-stone-100 pt-6 sm:flex-row">
+          <a routerLink="/" class="rounded-xl border border-stone-200 px-5 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-stone-50">Cancelar</a>
+          <button type="submit" [disabled]="submitting"
+            class="rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-50">
+            {{ submitting ? 'Guardando…' : (id ? 'Guardar cambios' : 'Crear registro') }}
+          </button>
+        </div>
+      </fieldset>
+    </form>
+  }
+</section>

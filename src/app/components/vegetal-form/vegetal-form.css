@@ -1,0 +1,35 @@
+:host {
+  display: block;
+}
+
+.field-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.field-input {
+  width: 100%;
+  border: 1px solid #d6d3d1;
+  border-radius: 0.75rem;
+  background-color: #fff;
+  padding: 0.75rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #0f172a;
+  outline: none;
+}
+
+.field-input:focus {
+  border-color: #047857;
+  box-shadow: 0 0 0 3px rgb(4 120 87 / 12%);
+}
+
+.field-error {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #b91c1c;
+}

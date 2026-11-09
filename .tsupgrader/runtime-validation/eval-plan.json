@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-11-09T19:35:00Z",
+  "generatedOnPlatform": "win32",
+  "projectType": "webapp",
+  "setup": [],
+  "assertions": [
+    {
+      "name": "production-build",
+      "kind": "process",
+      "command": "npm",
+      "args": ["run", "build"],
+      "verificationMethod": "exit-code",
+      "expected": "0",
+      "timeoutSeconds": 180
+    },
+    {
+      "name": "unit-tests-pass",
+      "kind": "process",
+      "command": "npm",
+      "args": ["test", "--", "--watch=false"],
+      "verificationMethod": "test-results",
+      "expected": "0",
+      "timeoutSeconds": 180
+    },
+    {
+      "name": "home-route-serves",
+      "kind": "http-probe",
+      "startCommand": "npm",
+      "startArgs": ["start", "--", "--host", "127.0.0.1", "--port", "4300"],
+      "url": "http://127.0.0.1:4300/",
+      "verificationMethod": "http-status",
+      "expected": "200",
+      "timeoutSeconds": 120
+    },
+    {
+      "name": "new-record-route-serves",
+      "kind": "http-probe",
+      "startCommand": "npm",
+      "startArgs": ["start", "--", "--host", "127.0.0.1", "--port", "4300"],
+      "url": "http://127.0.0.1:4300/nuevo",
+      "verificationMethod": "http-status",
+      "expected": "200",
+      "timeoutSeconds": 120
+    }
+  ]
+}
